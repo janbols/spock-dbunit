@@ -1,0 +1,17 @@
+apply from: "gradle/libraries.gradle"
+apply plugin: 'maven'
+apply plugin: 'idea'
+apply plugin: 'groovy'
+
+group = 'be.janbols'
+
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
