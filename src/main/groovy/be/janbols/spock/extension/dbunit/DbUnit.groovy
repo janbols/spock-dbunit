@@ -14,5 +14,6 @@ import java.lang.annotation.Target;
           @Target(ElementType.FIELD)
           @ExtensionAnnotation(DbUnitExtension.class)
 public @interface DbUnit {
-    Class<? extends Closure> value();
+    Class<? extends Closure> datasourceProvider();
+
 }

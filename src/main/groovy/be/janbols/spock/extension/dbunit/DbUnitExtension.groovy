@@ -31,7 +31,7 @@ class DbUnitExtension extends AbstractAnnotationDrivenExtension<DbUnit>{
 
     @Override
     void visitFieldAnnotation(DbUnit annotation, FieldInfo field) {
-        interceptor = new MyInterceptor(dataSourceClosureClass: annotation.value(), xmlDataFieldInfo: field);
+        interceptor = new MyInterceptor(dataSourceClosureClass: annotation.datasourceProvider(), xmlDataFieldInfo: field);
     }
 
 

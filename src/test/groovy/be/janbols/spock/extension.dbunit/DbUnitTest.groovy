@@ -15,7 +15,7 @@ import groovy.sql.Sql
 class DbUnitTest extends Specification{
     DataSource dataSource = new DataSource()
 
-    @DbUnit({
+    @DbUnit(datasourceProvider = {
         dataSource
     }) def content =  {
         User(id: 1, name: 'janbols')
