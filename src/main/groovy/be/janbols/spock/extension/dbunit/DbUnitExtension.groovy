@@ -16,8 +16,7 @@ import groovy.transform.InheritConstructors
 import org.spockframework.runtime.extension.AbstractMethodInterceptor
 import org.spockframework.runtime.extension.ExtensionException
 import org.spockframework.runtime.extension.IMethodInvocation
-import java.lang.reflect.Field
-import groovy.xml.MarkupBuilderHelper
+
 import groovy.xml.MarkupBuilder
 import org.joda.time.LocalDate
 
@@ -26,12 +25,12 @@ import org.joda.time.LocalDate
   */
 class DbUnitExtension extends AbstractAnnotationDrivenExtension<DbUnit>{
 
-    private MyInterceptor interceptor;
+    private DbUnitInterceptor interceptor;
 
 
     @Override
     void visitFieldAnnotation(DbUnit annotation, FieldInfo field) {
-        interceptor = new MyInterceptor(dataSourceClosureClass: annotation.datasourceProvider(), xmlDataFieldInfo: field);
+        interceptor = new DbUnitInterceptor(dbUnitAnnotation: annotation, xmlDataFieldInfo: field);
     }
 
 
@@ -49,44 +48,72 @@ class DbUnitExtension extends AbstractAnnotationDrivenExtension<DbUnit>{
 
 
 @InheritConstructors
-class MyInterceptor extends AbstractMethodInterceptor  {
-
-
+class DbUnitInterceptor extends AbstractMethodInterceptor  {
 
     private DbUnitSetup dbUnitSetup
     FieldInfo xmlDataFieldInfo
-    Class<? extends Closure> dataSourceClosureClass
-
-
-    private Closure createCondition(Class<? extends Closure> clazz, Object target) {
-        try {
-            def closure = clazz.newInstance(target, target)
-            return closure;
-        } catch (Exception e) {
-            throw new ExtensionException("Failed to instantiate @DbUnit", e);
-        }
-    }
-
-
+    DbUnit dbUnitAnnotation
 
 
     @Override
     void interceptSetupMethod(IMethodInvocation invocation) {
-
         invocation.proceed()
-        def dataSourceClosure = createCondition(dataSourceClosureClass, invocation.target)
-        def dataSource = dataSourceClosure()
-        def xmlDataClosure = xmlDataFieldInfo.readValue(invocation.target)
+
+        //after setup
+        def dataSource = findDataSource(dbUnitAnnotation, invocation)
+        if (!dataSource) {
+           throw new ExtensionException("Failed to find a javax.sql.DataSource. Specify one as a field or provide one using @DbUnit.datasourceProvider")
+        }
+        dbUnitSetup = new DbUnitSetup(dataSource)
+
+        String xml = getDataSetXml(xmlDataFieldInfo, invocation.target)
+        dbUnitSetup.setup(xml)
+    }
+
+
+
+
+    private static String getDataSetXml(FieldInfo xmlDataFieldInfo, Object target) {
+        def xmlDataClosure = xmlDataFieldInfo.readValue(target)
         def xmlWriter = new StringWriter()
         def builder = new MarkupBuilder(xmlWriter)
         builder.dataset(xmlDataClosure)
-        dbUnitSetup = new DbUnitSetup(dataSource)
-        dbUnitSetup.setup(xmlWriter as String)
+        xmlWriter as String
     }
+
+    private static DataSource findDataSource(DbUnit dbUnitAnnotation, IMethodInvocation invocation) {
+        DataSource result
+
+        if (Closure.isAssignableFrom(dbUnitAnnotation.datasourceProvider())){
+            result = findDataSourceByProvider(dbUnitAnnotation.datasourceProvider(), invocation.target)
+        }
+
+        if (!result) {
+            result = findDataSourceByField(invocation)
+        }
+        return result
+    }
+
+    private static DataSource findDataSourceByField(IMethodInvocation iMethodInvocation) {
+        def datasourceFieldInfo = iMethodInvocation.spec.allFields.find {
+            return DataSource.isAssignableFrom(it.reflection.type)
+        }
+        return datasourceFieldInfo?.readValue(iMethodInvocation.target)
+    }
+
+    private static DataSource findDataSourceByProvider(Class<? extends Closure> dataSourceProviderClass, Object target) {
+        try {
+            def dataSourceClosure = dataSourceProviderClass.newInstance(target, target)
+            return dataSourceClosure();
+        } catch (Exception e) {
+            throw new ExtensionException("Failed to instantiate datasourceProvider in @DbUnit", e);
+        }
+    }
+
 
     @Override
     void interceptCleanupMethod(IMethodInvocation invocation) {
-        dbUnitSetup.cleanup()
+        dbUnitSetup?.cleanup()
         invocation.proceed()
     }
 

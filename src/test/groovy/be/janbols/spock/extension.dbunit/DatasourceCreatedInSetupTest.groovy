@@ -12,16 +12,16 @@ import groovy.sql.Sql
 /**
   *
   */
-class DbUnitTest extends Specification{
-    DataSource dataSource = new DataSource()
+class DatasourceCreatedInSetupTest extends Specification{
 
-    @DbUnit(datasourceProvider = {
-        dataSource
-    }) def content =  {
+    DataSource dataSource
+
+    @DbUnit def content =  {
         User(id: 1, name: 'janbols')
     }
 
     def setup(){
+        dataSource = new DataSource()
         dataSource.driverClassName = 'org.h2.Driver'
         dataSource.url = 'jdbc:h2:mem:'
         dataSource.username = 'sa'
