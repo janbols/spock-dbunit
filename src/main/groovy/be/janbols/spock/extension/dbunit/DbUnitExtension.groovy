@@ -36,6 +36,7 @@ class DbUnitExtension extends AbstractAnnotationDrivenExtension<DbUnit>{
 
     @Override
     void visitSpec(SpecInfo spec) {
+        //Note: spring integration works becuase the SpringExtension is a global extension and is executed before this one.
         interceptor.install(spec)
     }
 
