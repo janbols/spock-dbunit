@@ -7,7 +7,7 @@ import spock.lang.Specification
 /**
   *
   */
-class DatasourceProvidedCreatedInSetupTest extends Specification{
+class DatasourceProviderTest extends Specification{
 
     DataSource dataSource
 

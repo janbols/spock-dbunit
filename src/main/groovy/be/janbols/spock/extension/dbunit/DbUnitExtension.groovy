@@ -53,14 +53,21 @@ class DbUnitInterceptor extends AbstractMethodInterceptor  {
     private DbUnitSetup dbUnitSetup
     FieldInfo xmlDataFieldInfo
     DbUnit dbUnitAnnotation
+    DataSource sharedDataSource
 
+
+    @Override
+    void interceptSetupSpecMethod(IMethodInvocation invocation) {
+        invocation.proceed()
+        sharedDataSource = findDataSource(dbUnitAnnotation, invocation)
+    }
 
     @Override
     void interceptSetupMethod(IMethodInvocation invocation) {
         invocation.proceed()
 
         //after setup
-        def dataSource = findDataSource(dbUnitAnnotation, invocation)
+        def dataSource = sharedDataSource? sharedDataSource: findDataSource(dbUnitAnnotation, invocation)
         if (!dataSource) {
            throw new ExtensionException("Failed to find a javax.sql.DataSource. Specify one as a field or provide one using @DbUnit.datasourceProvider")
         }
@@ -69,9 +76,6 @@ class DbUnitInterceptor extends AbstractMethodInterceptor  {
         String xml = getDataSetXml(xmlDataFieldInfo, invocation.target)
         dbUnitSetup.setup(xml)
     }
-
-
-
 
     private static String getDataSetXml(FieldInfo xmlDataFieldInfo, Object target) {
         def xmlDataClosure = xmlDataFieldInfo.readValue(target)
@@ -120,6 +124,7 @@ class DbUnitInterceptor extends AbstractMethodInterceptor  {
     @Override
     void install(SpecInfo spec) {
         spec.setupMethod.addInterceptor this
+        spec.setupSpecMethod.addInterceptor this
         spec.cleanupMethod.addInterceptor this
 
     }
