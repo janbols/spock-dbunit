@@ -15,5 +15,6 @@ import java.lang.annotation.Target;
           @ExtensionAnnotation(DbUnitExtension.class)
 public @interface DbUnit {
     Class<? extends Closure> datasourceProvider() default Object;
+    Class<? extends Closure> configure() default Object;
 
 }
