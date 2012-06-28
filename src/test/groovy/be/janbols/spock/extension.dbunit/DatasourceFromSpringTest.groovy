@@ -24,12 +24,19 @@ class DatasourceFromSpringTest extends Specification{
         new Sql(dataSource).execute("CREATE TABLE User(id INT PRIMARY KEY, name VARCHAR(255))")
     }
 
+    def cleanup() {
+        new Sql(dataSource).execute("drop table User")
+    }
+
     def "test"() {
         when:
         def result = new Sql(dataSource).firstRow("select * from User where name = 'janbols'")
         then:
         result.id == 1
     }
+
+
+
 
 
 

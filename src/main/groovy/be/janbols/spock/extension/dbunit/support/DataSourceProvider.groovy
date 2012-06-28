@@ -8,9 +8,10 @@ import org.spockframework.runtime.extension.ExtensionException
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy
 
 /**
- *
+ *  Provides the datasource by calling the DbUnit.datasourceProvider closure or by looking for a shared or unshared DataSource field
  */
 class DataSourceProvider {
+
     private final DbUnit dbUnitAnnotation
     private IMethodInvocation setupSpecInvocation
     private IMethodInvocation setupInvocation

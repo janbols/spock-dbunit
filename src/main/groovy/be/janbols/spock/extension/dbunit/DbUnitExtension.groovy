@@ -13,7 +13,7 @@ import org.spockframework.runtime.model.FieldInfo
 import be.janbols.spock.extension.dbunit.support.DbUnitInterceptor
 
 /**
- *
+ * Extension for DbUnit annotation.
  */
 class DbUnitExtension extends AbstractAnnotationDrivenExtension<DbUnit> {
 
@@ -40,28 +40,4 @@ class DbUnitExtension extends AbstractAnnotationDrivenExtension<DbUnit> {
 
 
 
-class DbUnitSetup {
-    private final DataSource dataSource
-    DataSourceDatabaseTester tester
-
-    DbUnitSetup(DataSource dataSource) {
-        this.dataSource = new TransactionAwareDataSourceProxy(dataSource)
-    }
-
-    void setup(String xmlData, String schema = null) {
-        tester = new DataSourceDatabaseTester(dataSource, schema)
-        tester.dataSet = getDataSet(new StringReader(xmlData))
-        tester.setUpOperation = DatabaseOperation.CLEAN_INSERT
-        tester.tearDownOperation = DatabaseOperation.DELETE_ALL
-        tester.onSetup()
-    }
-
-    void cleanup() {
-        if (tester) {
-            tester.onTearDown()
-        }
-    }
-
-
-}
 

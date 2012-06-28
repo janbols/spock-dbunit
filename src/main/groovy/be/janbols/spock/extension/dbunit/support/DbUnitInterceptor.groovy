@@ -21,8 +21,10 @@ import org.joda.time.LocalDateTime
 import org.dbunit.IDatabaseTester
 
 /**
- *
- */ @InheritConstructors
+ *  Interceptor for setup and cleanup methods for DbUnit
+ *  Interceptor for setup and cleanup methods for DbUnit
+ */
+@InheritConstructors
 class DbUnitInterceptor extends AbstractMethodInterceptor {
 
     private DataSourceDatabaseTester tester
@@ -72,7 +74,7 @@ class DbUnitInterceptor extends AbstractMethodInterceptor {
         if (configureClosureClass && Closure.isAssignableFrom(configureClosureClass)) {
             try {
                 def dataSourceClosure = configureClosureClass.newInstance(invocation.target, tester)
-                return dataSourceClosure();
+                return dataSourceClosure(tester);
             } catch (Exception e) {
                 throw new ExtensionException("Failed to instantiate tester configurer in @DbUnit", e);
             }

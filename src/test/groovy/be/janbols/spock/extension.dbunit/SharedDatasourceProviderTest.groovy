@@ -29,6 +29,10 @@ class SharedDatasourceProviderTest extends Specification{
         new Sql(dataSource).execute("CREATE TABLE User(id INT PRIMARY KEY, name VARCHAR(255))")
     }
 
+    def cleanupSpec() {
+        new Sql(dataSource).execute("drop table User")
+    }
+
 
     def "test"() {
         when:

@@ -12,7 +12,7 @@ import groovy.sql.Sql
 /**
   *
   */
-class DatasourceCreatedInSetupTest extends Specification{
+class DatasourceFromFieldTest extends Specification{
 
     DataSource dataSource
 
@@ -27,6 +27,10 @@ class DatasourceCreatedInSetupTest extends Specification{
         dataSource.username = 'sa'
         dataSource.password= ''
         new Sql(dataSource).execute("CREATE TABLE User(id INT PRIMARY KEY, name VARCHAR(255))")
+    }
+
+    def cleanup() {
+        new Sql(dataSource).execute("drop table User")
     }
 
     def "test"() {
