@@ -102,8 +102,8 @@ class DbUnitInterceptor extends AbstractMethodInterceptor {
 
     @Override
     void interceptCleanupMethod(IMethodInvocation invocation) {
-        invocation.proceed()
         tester?.onTearDown()
+        invocation.proceed()
     }
 
 

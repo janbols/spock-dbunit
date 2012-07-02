@@ -33,6 +33,10 @@ class ConfigureTesterTest extends Specification{
         new Sql(dataSource).execute("CREATE TABLE User(id INT PRIMARY KEY, name VARCHAR(255), created TIMESTAMP, expiration TIMESTAMP )")
     }
 
+    def cleanup() {
+        new Sql(dataSource).execute("drop table User")
+    }
+
 
 
     def "test"() {
