@@ -10,7 +10,7 @@ import javax.sql.DataSource;
 
 /**
  * Allows specifying the xml data as a closure field. This avoids the need to link to a separate xml file containing the xml data.
- * For this DbUnit needs to get hold of a  {@link javax.sql.DataSource} either by returning it in the {@link DbUnit#datasourceProvider} method or by adding it as a field in the test class.
+ * For this DbUnit needs to get hold of a  {@link javax.sql.DataSource} either by returning it in the {@link DbUnit#datasourceProvider} method or by adding it as a field in the specification.
  * f.e.
  * <pre>
  class MyDbUnitTest extends Specification{
@@ -19,12 +19,12 @@ import javax.sql.DataSource;
 
     {@literal @}DbUnit
     def content =  {
-        User(id: 1, name: 'janbols')
+        User(id: 1, name: 'jackdaniels', createdOn: '[NOW]')
     }
     ...
  }
   </pre>
- * The field containing the sql data can be replaced using the {@link org.dbunit.dataset.ReplacementDataSet}. By default this is done for the keyword [NULL] and [NOW]
+ * The values for the collumns in the sql data are replaced using the {@link org.dbunit.dataset.ReplacementDataSet}. By default this is done for the keyword [NULL] and [NOW]
  */
 @Retention(RetentionPolicy.RUNTIME)
           @Target(ElementType.FIELD)
@@ -37,10 +37,10 @@ public @interface DbUnit {
     Class<? extends Closure<DataSource>> datasourceProvider() default Object;
 
     /**
-     * Allows you to configure the {@link org.dbunit.IDatabaseTester}.
+     * Allows you to configure the {@link org.dbunit.IDatabaseTester} passed as the closure's argument.
      * This can be used f.e. to specify other {@link org.dbunit.operation.DatabaseOperation} for setup and teardown than the defaults.
      * This also allows you to specify the schema used or add a an operation listener.
-     * Finally it also allows you to specify replacements as the database tester is initially setup with a {@link org.dbunit.dataset.ReplacementDataSet}.
+     * Finally it allows you to specify replacements for the sql values you specified as the database tester is initially set up with a {@link org.dbunit.dataset.ReplacementDataSet}.
      * @return A closure with a IDatabaseTester as input argument configured with the data specified on the accompanying field.
      * @see org.dbunit.IDatabaseTester
      * @see org.dbunit.operation.DatabaseOperation
