@@ -16,3 +16,23 @@ Using groovy's MarkupBuilder you just specify your sql as a field like the examp
 
         ...
 
+The above code will setup dbUnit to insert the specified row in the User table. It will take the data source specified in the datasource field to get the connection to the database.
+
+Configuration
+-------------
+dbUnit needs a data source to connect to the database. This is done by specifying a datasourceProvider as an extra closure parameter in the @DbUnit annotation. 
+Alternatively, it will look for a DataSource field in your specification and use that one.
+
+The dbUnit DatabaseTester that is constructed can also be configured as an extra closure in the @DbUnit annotation. An example can be seen below:
+
+     @DbUnit(configure={IDatabaseTester it ->
+        it.setUpOperation = DatabaseOperation.CLEAN_INSERT
+        it.tearDownOperation = DatabaseOperation.TRUNCATE_TABLE
+
+        (it.dataSet as ReplacementDataSet).addReplacementObject('[TOMORROW]', LocalDateTime.now().plusDays(1).toDate())
+     }) 
+     def content =  {
+        User(id: 1, name: 'jackdaniels', created: '[NOW]', expiration: '[TOMORROW]')
+    }
+
+In the example above, the DatabaseTester that is being used to is being configured to do a clean insert during setup and a table truncate during cleanup. In addition all '[TOMORROW]' fields are being replaced with LocalDateTime.now().plusDays(1).toDate(). 
