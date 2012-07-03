@@ -1,5 +1,9 @@
 *.class
 
+.gradle
+build
+out
+
 # Package Files #
 *.jar
 *.war
@@ -9,3 +13,4 @@
 # idea
 .idea
 atlassian-ide-plugin.xml
+*.iml
