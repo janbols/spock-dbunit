@@ -52,22 +52,18 @@ class DbUnitInterceptor extends AbstractMethodInterceptor {
 
         tester = new DataSourceDatabaseTester(dataSource)
         tester.dataSet = getDataSet(new StringReader(xml))
-        Closure testerConfigurer = getTesterConfigurer(tester, invocation)
-        if (testerConfigurer) {
-            testerConfigurer.call(tester)
-        }
-
+        configureTester(tester, invocation)
         tester.onSetup()
     }
 
 
 
-    private Closure getTesterConfigurer(IDatabaseTester tester, IMethodInvocation invocation) {
+    private void configureTester(IDatabaseTester tester, IMethodInvocation invocation) {
         def configureClosureClass = dbUnitAnnotation.configure()
         if (configureClosureClass && Closure.isAssignableFrom(configureClosureClass)) {
             try {
-                def dataSourceClosure = configureClosureClass.newInstance(invocation.target, tester)
-                return dataSourceClosure(tester);
+                def configureClosure = configureClosureClass.newInstance(invocation.target, tester)
+                configureClosure(tester);
             } catch (Exception e) {
                 throw new ExtensionException("Failed to instantiate tester configurer in @DbUnit", e);
             }
