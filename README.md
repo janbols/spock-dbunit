@@ -24,6 +24,7 @@ dbUnit needs a data source to connect to the database. This is done by specifyin
 Alternatively, it will look for a DataSource field in your specification and use that one.
 
 The dbUnit DatabaseTester that is constructed can also be configured as an extra closure in the @DbUnit annotation. An example can be seen below:
+
      @DbUnit(configure={IDatabaseTester it ->
         it.setUpOperation = DatabaseOperation.CLEAN_INSERT
         it.tearDownOperation = DatabaseOperation.TRUNCATE_TABLE
