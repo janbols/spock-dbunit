@@ -16,7 +16,6 @@ import org.spockframework.runtime.model.SpecInfo
 
 /**
  *  Interceptor for setup and cleanup methods for DbUnit
- *  Interceptor for setup and cleanup methods for DbUnit
  */
 @InheritConstructors
 class DbUnitInterceptor extends AbstractMethodInterceptor {
