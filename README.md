@@ -35,3 +35,4 @@ The dbUnit DatabaseTester that is constructed can also be configured as an extra
         User(id: 1, name: 'jackdaniels', created: '[NOW]', expiration: '[TOMORROW]')
     }
 
+In the example above, the DatabaseTester that is being used to is being configured to do a clean insert during setup and a table truncate during cleanup. In addition all '[TOMORROW]' fields are being replaced with LocalDateTime.now().plusDays(1).toDate(). 
