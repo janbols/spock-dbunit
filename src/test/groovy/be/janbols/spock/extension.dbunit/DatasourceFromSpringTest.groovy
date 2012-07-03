@@ -1,11 +1,10 @@
 package be.janbols.spock.extension.dbunit
 
-import be.janbols.spock.extension.dbunit.DbUnit
 import groovy.sql.Sql
 import org.apache.tomcat.jdbc.pool.DataSource
-import spock.lang.Specification
-import org.springframework.test.context.ContextConfiguration
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.test.context.ContextConfiguration
+import spock.lang.Specification
 
 /**
   *

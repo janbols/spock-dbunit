@@ -1,12 +1,13 @@
 package be.janbols.spock.extension.dbunit;
 
-import org.spockframework.runtime.extension.ExtensionAnnotation;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import org.spockframework.runtime.extension.ExtensionAnnotation
+
+import java.lang.annotation.ElementType
+import java.lang.annotation.Retention
+import java.lang.annotation.RetentionPolicy
 import java.lang.annotation.Target
-import javax.sql.DataSource;
+import javax.sql.DataSource
 
 /**
  * Allows specifying the xml data as a closure field. This avoids the need to link to a separate xml file containing the xml data.

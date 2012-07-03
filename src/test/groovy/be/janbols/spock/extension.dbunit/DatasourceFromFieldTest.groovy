@@ -1,13 +1,8 @@
 package be.janbols.spock.extension.dbunit
 
-import spock.lang.Specification
-import org.springframework.beans.factory.annotation.Autowired
-import javax.sql.DataSource
-import groovy.xml.MarkupBuilder
-import org.h2.Driver
-import org.apache.tomcat.jdbc.pool.DataSource
-import org.springframework.jdbc.core.JdbcTemplate
 import groovy.sql.Sql
+import org.apache.tomcat.jdbc.pool.DataSource
+import spock.lang.Specification
 
 /**
   *

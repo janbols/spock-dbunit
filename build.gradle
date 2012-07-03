@@ -21,15 +21,18 @@ repositories {
 configurations.compile.transitive = true
 
 dependencies {
-    compile libs.spring.base
-    compile libs.logging
     groovy libs.groovy
-    compile libs.spock
-    compile libs.spring.test
+    compile libs.logging.api
+    compile libs.spock.core
     compile libs.dbunit
     compile libs.spring.jdbc
-    compile libs.jodatime
+
+    runtime libs.logging.impl
+
+    testCompile libs.spring.base
+    testCompile libs.spring.test
+    testCompile libs.jodatime
     testCompile libs.h2
-    testCompile libs.spock
+    testCompile libs.spock.spring
     testCompile libs.datasource
 }

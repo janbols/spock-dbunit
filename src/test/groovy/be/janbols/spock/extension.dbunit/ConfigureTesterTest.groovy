@@ -2,14 +2,14 @@ package be.janbols.spock.extension.dbunit
 
 import groovy.sql.Sql
 import org.apache.tomcat.jdbc.pool.DataSource
+import org.dbunit.IDatabaseTester
+import org.dbunit.dataset.ReplacementDataSet
+import org.dbunit.operation.DatabaseOperation
+import org.joda.time.LocalDate
+import org.joda.time.LocalDateTime
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import spock.lang.Specification
-import org.dbunit.IDatabaseTester
-import org.dbunit.operation.DatabaseOperation
-import org.dbunit.dataset.ReplacementDataSet
-import org.joda.time.LocalDateTime
-import org.joda.time.LocalDate
 
 /**
   *

@@ -1,24 +1,18 @@
 package be.janbols.spock.extension.dbunit.support
 
-import groovy.transform.InheritConstructors
-import org.spockframework.runtime.extension.AbstractMethodInterceptor
-import org.dbunit.DataSourceDatabaseTester
-import org.spockframework.runtime.model.FieldInfo
 import be.janbols.spock.extension.dbunit.DbUnit
-import javax.sql.DataSource
-
-import org.spockframework.runtime.extension.IMethodInvocation
-import org.spockframework.runtime.extension.ExtensionException
-import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy
+import groovy.transform.InheritConstructors
 import groovy.xml.MarkupBuilder
-import org.spockframework.runtime.model.SpecInfo
-import org.dbunit.dataset.IDataSet
+import org.dbunit.DataSourceDatabaseTester
+import org.dbunit.IDatabaseTester
 import org.dbunit.dataset.DataSetException
 import org.dbunit.dataset.ReplacementDataSet
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder
-import org.joda.time.LocalDate
-import org.joda.time.LocalDateTime
-import org.dbunit.IDatabaseTester
+import org.spockframework.runtime.extension.AbstractMethodInterceptor
+import org.spockframework.runtime.extension.ExtensionException
+import org.spockframework.runtime.extension.IMethodInvocation
+import org.spockframework.runtime.model.FieldInfo
+import org.spockframework.runtime.model.SpecInfo
 
 /**
  *  Interceptor for setup and cleanup methods for DbUnit
@@ -122,7 +116,7 @@ class DbUnitInterceptor extends AbstractMethodInterceptor {
     private ReplacementDataSet getDataSet(def input) throws DataSetException {
         def dataSet = new ReplacementDataSet(new FlatXmlDataSetBuilder().build(input))
         dataSet.addReplacementObject("[NULL]", null);
-        dataSet.addReplacementObject("[NOW]", LocalDateTime.now().toDate());
+        dataSet.addReplacementObject("[NOW]", new Date());
         return dataSet;
     }
 

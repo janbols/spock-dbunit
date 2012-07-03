@@ -1,16 +1,9 @@
 package be.janbols.spock.extension.dbunit
 
-import org.spockframework.runtime.extension.AbstractAnnotationDrivenExtension
-import javax.sql.DataSource
-import org.dbunit.DataSourceDatabaseTester
-import org.dbunit.operation.DatabaseOperation
-
-import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy
-import org.spockframework.runtime.model.SpecInfo
-
-import org.spockframework.runtime.model.FieldInfo
-
 import be.janbols.spock.extension.dbunit.support.DbUnitInterceptor
+import org.spockframework.runtime.extension.AbstractAnnotationDrivenExtension
+import org.spockframework.runtime.model.FieldInfo
+import org.spockframework.runtime.model.SpecInfo
 
 /**
  * Extension for DbUnit annotation.

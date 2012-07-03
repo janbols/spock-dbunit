@@ -1,11 +1,11 @@
 package be.janbols.spock.extension.dbunit.support
 
-import groovy.transform.Immutable
 import be.janbols.spock.extension.dbunit.DbUnit
-import org.spockframework.runtime.extension.IMethodInvocation
-import javax.sql.DataSource
 import org.spockframework.runtime.extension.ExtensionException
+import org.spockframework.runtime.extension.IMethodInvocation
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy
+
+import javax.sql.DataSource
 
 /**
  *  Provides the datasource by calling the DbUnit.datasourceProvider closure or by looking for a shared or unshared DataSource field

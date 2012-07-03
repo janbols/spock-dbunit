@@ -14,7 +14,6 @@ ext {
                     , tx: [
                             "org.springframework:spring-orm:$springVersion"
                             , "org.springframework:spring-tx:$springVersion"
-                            , "org.springframework:spring-jdbc:$springVersion"
                     ]
                     , jdbc: "org.springframework:spring-jdbc:$springVersion"
                     , test: "org.springframework:spring-test:$springVersion"
@@ -25,22 +24,21 @@ ext {
 
             , datasource: "org.apache.tomcat:tomcat-jdbc:7.0.27"
 
-
             , spock: [
-                    "org.spockframework:spock-core:$spockVersion"
-                    , "org.spockframework:spock-spring:$spockVersion"
+                core: "org.spockframework:spock-core:$spockVersion"
+                , spring: "org.spockframework:spock-spring:$spockVersion"
             ]
-            , dbunit: "org.dbunit:dbunit:2.4.8",
 
-            logging: [
+            , dbunit: "org.dbunit:dbunit:2.4.8"
+            , logging: [
+                api: "org.slf4j:slf4j-api:$slf4jVersion"
+                , impl: [
                     "org.slf4j:slf4j-api:$slf4jVersion"
-                    , "org.slf4j:jcl-over-slf4j:$slf4jVersion"
                     , "ch.qos.logback:logback-core:$logbackVersion"
                     , "ch.qos.logback:logback-classic:$logbackVersion"
-            ],
-            jodatime: [
-                    "joda-time:joda-time:2.1"
+                ]
             ]
+            , jodatime: "joda-time:joda-time:2.1"
 
     ]
 }

@@ -2,8 +2,8 @@ package be.janbols.spock.extension.dbunit
 
 import groovy.sql.Sql
 import org.apache.tomcat.jdbc.pool.DataSource
-import spock.lang.Specification
 import spock.lang.Shared
+import spock.lang.Specification
 
 /**
   *
