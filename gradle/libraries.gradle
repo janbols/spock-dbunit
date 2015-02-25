@@ -1,8 +1,8 @@
 ext {
-    springVersion = '3.1.1.RELEASE'
+    springVersion = '4.1.4.RELEASE'
     slf4jVersion = '1.6.4'
     logbackVersion = '1.0.3'
-    spockVersion = '0.7-groovy-2.0'
+    spockVersion = '1.0-groovy-2.3-SNAPSHOT'
 
     libs = [
             spring: [

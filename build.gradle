@@ -15,13 +15,15 @@ targetCompatibility = 1.6
 repositories {
     mavenLocal()
     mavenCentral()
+
+    maven { url 'http://oss.sonatype.org/content/repositories/snapshots/' }
 }
 
 
 configurations.compile.transitive = true
 
 dependencies {
-    groovy libs.groovy
+    compile libs.groovy
     compile libs.logging.api
     compile libs.spock.core
     compile libs.dbunit

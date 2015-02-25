@@ -48,7 +48,7 @@ class DbUnitInterceptor extends AbstractMethodInterceptor {
             throw new ExtensionException("Failed to find a javax.sql.DataSource. Specify one as a field or provide one using @DbUnit.datasourceProvider")
         }
 
-        String xml = getDataSetXml(xmlDataFieldInfo, invocation.target)
+        String xml = getDataSetXml(xmlDataFieldInfo, invocation.target.currentInstance)
 
         tester = new DataSourceDatabaseTester(dataSource)
         tester.dataSet = getDataSet(new StringReader(xml))
@@ -94,15 +94,12 @@ class DbUnitInterceptor extends AbstractMethodInterceptor {
         tester?.onTearDown()
         invocation.proceed()
     }
+  
 
-
-
-
-    @Override
     void install(SpecInfo spec) {
-        spec.setupMethod.addInterceptor this
-        spec.setupSpecMethod.addInterceptor this
-        spec.cleanupMethod.addInterceptor this
+        spec.setupInterceptors.add(this)
+        spec.setupSpecInterceptors.add(this)
+        spec.cleanupSpecInterceptors.add(this)
 
     }
 
