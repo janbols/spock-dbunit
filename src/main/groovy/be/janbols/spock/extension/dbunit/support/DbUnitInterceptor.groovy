@@ -48,7 +48,7 @@ class DbUnitInterceptor extends AbstractMethodInterceptor {
             throw new ExtensionException("Failed to find a javax.sql.DataSource. Specify one as a field or provide one using @DbUnit.datasourceProvider")
         }
 
-        String xml = getDataSetXml(xmlDataFieldInfo, invocation.target)
+        String xml = getDataSetXml(xmlDataFieldInfo, invocation.instance)
 
         tester = new DataSourceDatabaseTester(dataSource)
         tester.dataSet = getDataSet(new StringReader(xml))
@@ -62,7 +62,7 @@ class DbUnitInterceptor extends AbstractMethodInterceptor {
         def configureClosureClass = dbUnitAnnotation.configure()
         if (configureClosureClass && Closure.isAssignableFrom(configureClosureClass)) {
             try {
-                def configureClosure = configureClosureClass.newInstance(invocation.target, tester)
+                def configureClosure = configureClosureClass.newInstance(invocation.instance, tester)
                 configureClosure(tester);
             } catch (Exception e) {
                 throw new ExtensionException("Failed to instantiate tester configurer in @DbUnit", e);
@@ -98,12 +98,10 @@ class DbUnitInterceptor extends AbstractMethodInterceptor {
 
 
 
-    @Override
     void install(SpecInfo spec) {
-        spec.setupMethod.addInterceptor this
-        spec.setupSpecMethod.addInterceptor this
-        spec.cleanupMethod.addInterceptor this
-
+        spec.addSetupInterceptor this
+        spec.addSetupSpecInterceptor this
+        spec.addCleanupInterceptor this
     }
 
 

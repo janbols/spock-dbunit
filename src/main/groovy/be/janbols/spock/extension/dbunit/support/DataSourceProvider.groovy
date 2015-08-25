@@ -48,7 +48,7 @@ class DataSourceProvider {
 
 
         if (dataSourceProviderClosureClass && Closure.isAssignableFrom(dataSourceProviderClosureClass)) {
-            result = findDataSourceByProvider(dataSourceProviderClosureClass, invocation.target)
+            result = findDataSourceByProvider(dataSourceProviderClosureClass, invocation.instance)
         }
 
         if (!result) {
@@ -61,7 +61,7 @@ class DataSourceProvider {
         def datasourceFieldInfo = iMethodInvocation.spec.allFields.find {
             return DataSource.isAssignableFrom(it.reflection.type)
         }
-        return datasourceFieldInfo?.readValue(iMethodInvocation.target)
+        return datasourceFieldInfo?.readValue(iMethodInvocation.instance)
     }
 
     private static DataSource findDataSourceByProvider(Class<? extends Closure> dataSourceProviderClass, Object target) {
