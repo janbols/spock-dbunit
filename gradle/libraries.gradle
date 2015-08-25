@@ -29,7 +29,7 @@ ext {
                 , spring: "org.spockframework:spock-spring:$spockVersion"
             ]
 
-            , dbunit: "org.dbunit:dbunit:2.4.8"
+            , dbunit: "org.dbunit:dbunit:2.5.1"
             , logging: [
                 api: "org.slf4j:slf4j-api:$slf4jVersion"
                 , impl: [
