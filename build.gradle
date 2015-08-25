@@ -28,7 +28,6 @@ dependencies {
     compile libs.logging.api
     compile libs.spock.core
     compile libs.dbunit
-    compile libs.spring.jdbc
 
     runtime libs.logging.impl
 
