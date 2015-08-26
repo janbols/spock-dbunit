@@ -1,11 +1,16 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+}
 
-
+plugins {
+    id "com.jfrog.bintray" version "1.3.1"
+    id 'groovy'
+    id 'maven-publish'
+}
 
 apply from: "gradle/libraries.gradle"
-apply plugin: 'maven'
-apply plugin: 'idea'
-apply plugin: 'java'
-apply plugin: 'groovy'
 
 
 group = 'be.janbols'
@@ -39,7 +44,41 @@ dependencies {
     testCompile libs.datasource
 }
 
+task sourcesJar(type: Jar, dependsOn: classes) {
+    from sourceSets.main.allSource
+    classifier "sources"
+    extension "jar"
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+        }
+    }
+}
+
 
 task wrapper(type: Wrapper) {
     gradleVersion = "2.6"
 }
+
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+    publications = ["mavenJava"]
+    pkg {
+        repo = 'maven'
+        name = 'spock-dbunit'
+        licenses = ['Apache-2.0']
+        websiteUrl = 'https://github.com/janbols/spock-dbunit'
+        vcsUrl = 'https://github.com/janbols/spock-dbunit.git'
+        version {
+            name = version
+            vcsTag = version
+        }
+    }
+
+}
+bintrayUpload.dependsOn build, sourcesJar

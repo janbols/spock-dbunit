@@ -44,3 +44,40 @@ can also be configured as an extra closure in the @DbUnit annotation. An example
 
 In the example above, the DatabaseTester is being configured to do a clean insert during setup and a table truncate during cleanup.
 In addition all '[TOMORROW]' fields are being replaced with LocalDateTime.now().plusDays(1).toDate().
+
+Getting started
+---
+To enable this Spock extension, you need to add a dependency to it
+
+using Maven:
+
+Enable the JCenter repository:
+
+    <repository>
+      <id>jcenter</id>
+      <name>JCenter Repo</name>
+      <url>http://jcenter.bintray.com</url>
+    </repository>
+Add spock-reports to your <dependencies>:
+
+        <dependency>
+              <groupId>be.janbols</groupId>
+              <artifactId>spock-dbunit</artifactId>
+              <version>0.2</version>
+              <scope>test</scope>
+        </dependency>
+
+
+using Gradle:
+
+    repositories {
+      jcenter()
+    }
+
+    dependencies {
+        testCompile( 'be.janbols:spock-dbunit:0.2' )
+    }
+
+If you prefer, you can just download the jar directly from [JCenter](https://bintray.com/artifact/download/janbols/maven/be/janbols/spock-dbunit/0.2/spock-dbunit-0.2.jar).
+
+
