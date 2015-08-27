@@ -35,7 +35,7 @@ class DataSourceProvider {
             result = doFindDataSource(dbUnitAnnotation.datasourceProvider(), setupInvocation)
         }
 
-        if (result && springIsOnClasspath) {
+        if (result) {
             result = makeTransactionalAware(result)
         }
 
