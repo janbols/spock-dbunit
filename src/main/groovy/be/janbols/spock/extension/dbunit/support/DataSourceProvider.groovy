@@ -3,6 +3,7 @@ package be.janbols.spock.extension.dbunit.support
 import be.janbols.spock.extension.dbunit.DbUnit
 import org.spockframework.runtime.extension.ExtensionException
 import org.spockframework.runtime.extension.IMethodInvocation
+import org.spockframework.util.ReflectionUtil
 
 import javax.sql.DataSource
 
@@ -10,20 +11,7 @@ import javax.sql.DataSource
  *  Provides the datasource by calling the DbUnit.datasourceProvider closure or by looking for a shared or unshared DataSource field
  */
 class DataSourceProvider {
-    private static final String transactionAwareClass =  "org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy"
-    private static final boolean springIsOnClasspath
-
-    static {
-        try {
-            Class.forName(transactionAwareClass, false, DataSourceProvider.classLoader);
-            springIsOnClasspath = true
-        } catch(ClassNotFoundException e) {
-            springIsOnClasspath = false
-        }
-    }
-
-
-
+    private static final Class transactionAwareClass  = ReflectionUtil.loadClassIfAvailable("org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy")
 
     private final DbUnit dbUnitAnnotation
     private IMethodInvocation setupSpecInvocation
@@ -90,8 +78,7 @@ class DataSourceProvider {
      *  use transaction aware data source so changes are visible during the same @Transactional annotated feature
      */
     private static DataSource makeTransactionalAware(DataSource dataSource) {
-        if (springIsOnClasspath)  {
-            def transactionAwareClass = Class.forName(transactionAwareClass)
+        if (transactionAwareClass)  {
             if(transactionAwareClass.isInstance(dataSource))  {
                 return dataSource
             } else {
