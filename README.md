@@ -47,7 +47,7 @@ In addition all '[TOMORROW]' fields are being replaced with LocalDateTime.now().
 
 Getting started
 ---
-To enable this Spock extension, you need to add a dependency to it
+To enable this Spock extension, you need to add a dependency to this and a dependency to dbUnit
 
 using Maven:
 
@@ -60,12 +60,18 @@ Enable the JCenter repository:
     </repository>
 Add spock-reports to your <dependencies>:
 
-        <dependency>
-              <groupId>be.janbols</groupId>
-              <artifactId>spock-dbunit</artifactId>
-              <version>0.2</version>
-              <scope>test</scope>
-        </dependency>
+    <dependency>
+        <groupId>be.janbols</groupId>
+        <artifactId>spock-dbunit</artifactId>
+        <version>0.2</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.dbunit</groupId>
+        <artifactId>dbunit</artifactId>
+        <version>2.5.1</version>
+        <scope>test</scope>
+    </dependency>
 
 
 using Gradle:
@@ -76,8 +82,8 @@ using Gradle:
 
     dependencies {
         testCompile( 'be.janbols:spock-dbunit:0.2' )
+        testCompile( 'org.dbunit:dbunit:2.5.1' )
     }
 
-If you prefer, you can just download the jar directly from [JCenter](https://bintray.com/artifact/download/janbols/maven/be/janbols/spock-dbunit/0.2/spock-dbunit-0.2.jar).
-
+If you prefer, you can just download the jar directly from [JCenter](http://jcenter.bintray.com/be/janbols/spock-dbunit/0.2/spock-dbunit-0.2.jar).
 
