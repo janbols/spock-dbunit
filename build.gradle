@@ -13,7 +13,7 @@ plugins {
 
 
 group = 'be.janbols'
-version = "0.2"
+version = "0.3-SNAPSHOT"
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
