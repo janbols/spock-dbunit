@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/janbols/spock-dbunit.svg?branch=master)](https://travis-ci.org/janbols/spock-dbunit)
+
 spock-dbunit
 ============
 
