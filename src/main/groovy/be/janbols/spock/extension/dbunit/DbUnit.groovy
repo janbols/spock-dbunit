@@ -1,13 +1,12 @@
-package be.janbols.spock.extension.dbunit;
-
+package be.janbols.spock.extension.dbunit
 
 import org.spockframework.runtime.extension.ExtensionAnnotation
 
+import javax.sql.DataSource
 import java.lang.annotation.ElementType
 import java.lang.annotation.Retention
 import java.lang.annotation.RetentionPolicy
 import java.lang.annotation.Target
-import javax.sql.DataSource
 
 /**
  * Allows specifying the xml data as a closure field. This avoids the need to link to a separate xml file containing the xml data.
@@ -35,7 +34,7 @@ public @interface DbUnit {
      * Allows a {@link javax.sql.DataSource} to be provided inside the given closure. A dataSource can also be provided as a field of the test class. In that case you don't need to specify one in here.
      * @return A closure returning a {@link javax.sql.DataSource}
      */
-    Class<? extends Closure<DataSource>> datasourceProvider() default Object;
+    Class<? extends Closure<DataSource>> datasourceProvider() default Object.class;
 
     /**
      * Allows you to configure the {@link org.dbunit.IDatabaseTester} passed as the closure's argument.
@@ -49,6 +48,12 @@ public @interface DbUnit {
      * @see org.dbunit.AbstractDatabaseTester#tearDownOperation
      * @see org.dbunit.dataset.ReplacementDataSet
      */
-    Class<? extends Closure> configure() default Object;
+    Class<? extends Closure> configure() default Object.class;
+
+    /**
+     * Name of the schema to use.
+     * @return
+     */
+    String schema() default "";
 
 }

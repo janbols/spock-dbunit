@@ -50,7 +50,7 @@ class DbUnitInterceptor extends AbstractMethodInterceptor {
 
         String xml = getDataSetXml(xmlDataFieldInfo, invocation.instance)
 
-        tester = new DataSourceDatabaseTester(dataSource)
+        tester = new DataSourceDatabaseTester(dataSource, dbUnitAnnotation.schema())
         tester.dataSet = getDataSet(new StringReader(xml))
         configureTester(tester, invocation)
         tester.onSetup()
