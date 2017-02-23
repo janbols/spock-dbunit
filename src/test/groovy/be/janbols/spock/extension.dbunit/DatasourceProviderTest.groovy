@@ -4,6 +4,8 @@ import groovy.sql.Sql
 import org.apache.tomcat.jdbc.pool.DataSource
 import spock.lang.Specification
 
+import static be.janbols.spock.extension.dbunit.TestUtils.createDataSource
+
 /**
   *
   */
@@ -18,11 +20,7 @@ class DatasourceProviderTest extends Specification{
     }
 
     def setup(){
-        dataSource = new DataSource()
-        dataSource.driverClassName = 'org.h2.Driver'
-        dataSource.url = 'jdbc:h2:mem:'
-        dataSource.username = 'sa'
-        dataSource.password= ''
+        dataSource = createDataSource()
         new Sql(dataSource).execute("CREATE TABLE User(id INT PRIMARY KEY, name VARCHAR(255))")
     }
 
