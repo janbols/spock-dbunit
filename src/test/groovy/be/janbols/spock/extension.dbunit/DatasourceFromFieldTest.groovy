@@ -4,7 +4,7 @@ import groovy.sql.Sql
 import org.apache.tomcat.jdbc.pool.DataSource
 import spock.lang.Specification
 
-import static be.janbols.spock.extension.dbunit.TestUtils.createDataSource
+import static be.janbols.spock.extension.dbunit.TestUtils.inMemoryDataSource
 
 /**
  *
@@ -23,8 +23,8 @@ class DatasourceFromFieldTest extends Specification {
         Other_User(id: 3, name: 'tester', ip: '1.2.3.4')
     }
 
-    def setup() {
-        dataSource = createDataSource()
+    def setup(){
+        dataSource = inMemoryDataSource()
         new Sql(dataSource).execute("CREATE TABLE User(id INT PRIMARY KEY, name VARCHAR(255), ip VARCHAR(50))")
         new Sql(dataSource).execute("CREATE TABLE Other_User(id INT PRIMARY KEY, name VARCHAR(255), ip VARCHAR(50))")
     }
@@ -34,7 +34,7 @@ class DatasourceFromFieldTest extends Specification {
         new Sql(dataSource).execute("drop table Other_User")
     }
 
-    def "test"() {
+    def "selecting from the User table returns the user"() {
         when:
         def result = new Sql(dataSource).firstRow("select * from User where name = 'janbols'")
         then:

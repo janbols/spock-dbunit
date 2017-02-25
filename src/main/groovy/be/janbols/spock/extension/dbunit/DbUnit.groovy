@@ -27,7 +27,7 @@ import java.lang.annotation.Target
  * The values for the collumns in the sql data are replaced using the {@link org.dbunit.dataset.ReplacementDataSet}. By default this is done for the keyword [NULL] and [NOW]
  */
 @Retention(RetentionPolicy.RUNTIME)
-          @Target(ElementType.FIELD)
+          @Target([ElementType.FIELD, ElementType.METHOD])
           @ExtensionAnnotation(DbUnitExtension.class)
 public @interface DbUnit {
     /**
@@ -55,5 +55,7 @@ public @interface DbUnit {
      * @return
      */
     String schema() default "";
+
+    Class<? extends Closure> content() default Object;
 
 }

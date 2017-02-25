@@ -4,7 +4,7 @@ import groovy.sql.Sql
 import org.apache.tomcat.jdbc.pool.DataSource
 import spock.lang.Specification
 
-import static be.janbols.spock.extension.dbunit.TestUtils.createDataSource
+import static be.janbols.spock.extension.dbunit.TestUtils.inMemoryDataSource
 
 /**
  *
@@ -19,7 +19,7 @@ class SchemaTest extends Specification {
     }
 
     def setup() {
-        dataSource = createDataSource()
+        dataSource = inMemoryDataSource()
         def sql = new Sql(dataSource)
         sql.execute("CREATE SCHEMA if not exists otherSchema")
         sql.execute("CREATE TABLE otherSchema.User(id INT PRIMARY KEY, name VARCHAR(255))")
