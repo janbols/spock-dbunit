@@ -3,9 +3,9 @@ package be.janbols.spock.extension.dbunit
 import groovy.sql.Sql
 import org.apache.tomcat.jdbc.pool.DataSource
 
-class TestUtils {
+class SpecUtils {
 
-    private TestUtils() {}
+    private SpecUtils() {}
 
     static DataSource inMemoryDataSource() {
         return new DataSource().with { dataSource ->

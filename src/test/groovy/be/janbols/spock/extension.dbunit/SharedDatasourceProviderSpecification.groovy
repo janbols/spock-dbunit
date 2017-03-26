@@ -2,26 +2,31 @@ package be.janbols.spock.extension.dbunit
 
 import groovy.sql.Sql
 import org.apache.tomcat.jdbc.pool.DataSource
+import spock.lang.Shared
 import spock.lang.Specification
 
-import static be.janbols.spock.extension.dbunit.TestUtils.*
+import static be.janbols.spock.extension.dbunit.SpecUtils.*
 
 /**
- *
- */
-class StaticContentTest extends Specification {
+  * Specification showing that DbUnit uses the datasource that is specified in the DbUnit#datasourceProvider closure referencing a shared datasource
+  */
+class SharedDatasourceProviderSpecification extends Specification{
 
-    DataSource dataSource
+    @Shared DataSource dataSource
 
-    @DbUnit
-    def content = DbData.userData
+    @DbUnit(datasourceProvider = {
+        dataSource
+    })
+    def content =  {
+        User(id: 1, name: 'janbols')
+    }
 
-    def setup() {
+    def setupSpec(){
         dataSource = inMemoryDataSource()
         dataSource?.with {createUserTable(it)}
     }
 
-    def cleanup() {
+    def cleanupSpec() {
         dataSource?.with {dropUserTable(it)}
     }
 
@@ -32,10 +37,4 @@ class StaticContentTest extends Specification {
         result.id == 1
     }
 
-
-}
-
-
-class DbData {
-    static def userData = { User(id: 1, name: 'janbols') }
 }

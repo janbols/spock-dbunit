@@ -4,12 +4,12 @@ import groovy.sql.Sql
 import org.apache.tomcat.jdbc.pool.DataSource
 import spock.lang.Specification
 
-import static be.janbols.spock.extension.dbunit.TestUtils.inMemoryDataSource
+import static SpecUtils.inMemoryDataSource
 
 /**
- *
+ * Specification showing how to specify the schema to use using the DbUnit#schema field
  */
-class SchemaTest extends Specification {
+class SchemaSpecification extends Specification {
 
     DataSource dataSource
 

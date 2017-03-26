@@ -13,7 +13,7 @@ import spock.lang.Specification
   *
   */
 @ContextConfiguration(locations='classpath:/spring/context.xml')
-class Issue4Test extends Specification{
+class Issue4Specification extends Specification{
 
     @Autowired DataSource dataSource
 
