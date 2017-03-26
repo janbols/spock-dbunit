@@ -6,13 +6,13 @@ import org.dbunit.IDatabaseTester
 import org.spockframework.runtime.extension.AbstractMethodInterceptor
 import org.spockframework.runtime.extension.ExtensionException
 import org.spockframework.runtime.extension.IMethodInvocation
+import org.spockframework.runtime.model.FeatureInfo
 import org.spockframework.runtime.model.FieldInfo
-import org.spockframework.runtime.model.SpecInfo
 
 /**
- *  Interceptor for setup and cleanup methods for DbUnit
+ *  Interceptor for setup, feature and cleanup methods for DbUnit
  */
-class DbUnitFieldInterceptor extends AbstractMethodInterceptor {
+class DbUnitInterceptor extends AbstractMethodInterceptor {
 
     private DataSourceDatabaseTester tester
     private final DbUnit dbUnitAnnotation
@@ -20,12 +20,21 @@ class DbUnitFieldInterceptor extends AbstractMethodInterceptor {
     private final DataSourceProvider dataSourceProvider
     private final DataSetProvider dataSetProvider
 
-    DbUnitFieldInterceptor(FieldInfo dataFieldInfo, DbUnit dbUnitAnnotation) {
+    DbUnitInterceptor(FieldInfo dataFieldInfo, DbUnit dbUnitAnnotation) {
+        assert dataFieldInfo
+        assert dbUnitAnnotation
         this.dbUnitAnnotation = dbUnitAnnotation
         this.dataSetProvider = new DataSetProvider(dbUnitAnnotation, dataFieldInfo)
         this.dataSourceProvider = new DataSourceProvider(dbUnitAnnotation)
     }
 
+    DbUnitInterceptor(FeatureInfo featureInfo, DbUnit dbUnitAnnotation) {
+        assert featureInfo
+        assert dbUnitAnnotation
+        this.dbUnitAnnotation = dbUnitAnnotation
+        this.dataSetProvider = new DataSetProvider(dbUnitAnnotation, null)
+        this.dataSourceProvider = new DataSourceProvider(dbUnitAnnotation)
+    }
 
     @Override
     void interceptSetupSpecMethod(IMethodInvocation invocation) {
@@ -37,7 +46,10 @@ class DbUnitFieldInterceptor extends AbstractMethodInterceptor {
     void interceptSetupMethod(IMethodInvocation invocation) {
         invocation.proceed()
         dataSourceProvider.withSetupInvocation(invocation)
+    }
 
+    @Override
+    void interceptFeatureMethod(IMethodInvocation invocation) throws Throwable {
         //after setup to allow datasource setup
         def dataSource = dataSourceProvider.findDataSource()
         if (!dataSource) {
@@ -53,8 +65,9 @@ class DbUnitFieldInterceptor extends AbstractMethodInterceptor {
         tester.dataSet = dataSet
         configureTester(tester, invocation)
         tester.onSetup()
-    }
 
+        invocation.proceed()
+    }
 
     private void configureTester(IDatabaseTester tester, IMethodInvocation invocation) {
         def configureClosureClass = dbUnitAnnotation.configure()
@@ -68,19 +81,10 @@ class DbUnitFieldInterceptor extends AbstractMethodInterceptor {
         }
     }
 
-
     @Override
     void interceptCleanupMethod(IMethodInvocation invocation) {
         tester?.onTearDown()
         invocation.proceed()
     }
-
-
-    void install(SpecInfo spec) {
-        spec.addSetupInterceptor this
-        spec.addSetupSpecInterceptor this
-        spec.addCleanupInterceptor this
-    }
-
 
 }

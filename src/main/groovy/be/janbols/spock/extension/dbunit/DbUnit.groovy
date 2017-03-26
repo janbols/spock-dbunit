@@ -56,6 +56,10 @@ public @interface DbUnit {
      */
     String schema() default "";
 
+    /**
+     * Optional Closure containing the content of the database. This can only be used in a DbUnit annotation on a feature. For DbUnit annotation on a field, the field itself is expected to contain the content.
+     * @return
+     */
     Class<? extends Closure> content() default Object;
 
 }

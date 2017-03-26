@@ -38,10 +38,9 @@ class DbUnitFeatureInterceptor extends AbstractMethodInterceptor {
     @Override
     void interceptSetupMethod(IMethodInvocation invocation) {
         invocation.proceed()
-        dataSourceProvider.withSetupInvocation(invocation)
-
 
         if (!featureInfo || featureInfo.featureMethod == invocation.feature.featureMethod) {
+            dataSourceProvider.withSetupInvocation(invocation)
             //after setup to allow datasource setup
             def dataSource = dataSourceProvider.findDataSource()
             if (!dataSource) {
@@ -64,6 +63,11 @@ class DbUnitFeatureInterceptor extends AbstractMethodInterceptor {
     void interceptFeatureMethod(IMethodInvocation invocation) throws Throwable {
         invocation.proceed()
         
+    }
+
+    @Override
+    void interceptFeatureExecution(IMethodInvocation invocation) throws Throwable {
+        super.interceptFeatureExecution(invocation)
     }
 
     private void configureTester(IDatabaseTester tester, IMethodInvocation invocation) {
