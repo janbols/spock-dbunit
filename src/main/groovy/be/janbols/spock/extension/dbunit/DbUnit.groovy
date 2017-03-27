@@ -1,4 +1,4 @@
-e package be.janbols.spock.extension.dbunit
+package be.janbols.spock.extension.dbunit
 
 import org.spockframework.runtime.extension.ExtensionAnnotation
 
@@ -57,9 +57,23 @@ public @interface DbUnit {
     String schema() default "";
 
     /**
-     * Optional Closure containing the content of the database. This can only be used in a DbUnit annotation on a feature. For DbUnit annotation on a field, the field ist
+     * Optional Closure containing the content of the database. This can only be used in a DbUnit annotation on a feature.
+     * For DbUnit annotation on a field, the field itself is expected to contain the content.
+     * f.e.
+     * <pre>
+     class MyDbUnitTest extends Specification{
+
+         {@literal @}DbUnit(content = {
+            User(id: 1, name: 'janbols')
+         })
+         def "feature with specific databasse content"() {
+            ...
+         }
+
+     }
+     </pre>
      * @return
      */
-    Class<? extends Closure> content() default Object;
+    Class<? extends Closure> content() default Object.class;
 
 }
