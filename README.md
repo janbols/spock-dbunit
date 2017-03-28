@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/janbols/spock-dbunit.svg?branch=master)](https://travis-ci.org/janbols/spock-dbunit)
+[![Download](https://api.bintray.com/packages/janbols/maven/spock-dbunit/images/download.svg) ](https://bintray.com/janbols/maven/spock-dbunit/_latestVersion)
 
 spock-dbunit
 ============
@@ -172,7 +173,7 @@ Add spock-reports to your <dependencies>:
     <dependency>
         <groupId>be.janbols</groupId>
         <artifactId>spock-dbunit</artifactId>
-        <version>0.2</version>
+        <version>0.3</version>
         <scope>test</scope>
     </dependency>
     <dependency>
@@ -190,11 +191,12 @@ using Gradle:
     }
 
     dependencies {
-        testCompile( 'be.janbols:spock-dbunit:0.2' )
+        testCompile( 'be.janbols:spock-dbunit:0.3' )
         testCompile( 'org.dbunit:dbunit:2.5.1' )
     }
 
-If you prefer, you can just download the jar directly from [JCenter](http://jcenter.bintray.com/be/janbols/spock-dbunit/0.2/spock-dbunit-0.2.jar).
+If you prefer, you can just download the jar directly 
+from [JCenter](http://jcenter.bintray.com/be/janbols/spock-dbunit/0.3/spock-dbunit-0.3.jar).
 
 Changes
 ---

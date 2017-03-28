@@ -5,14 +5,14 @@ buildscript {
 }
 
 plugins {
-    id "com.jfrog.bintray" version "1.3.1"
+    id "com.jfrog.bintray" version "1.7.3"
     id 'groovy'
     id 'maven-publish'
 }
 
 
 
-group = 'be.janbols'
+group = 'com.github.janbols'
 version = "0.3"
 
 sourceCompatibility = 1.6
@@ -54,19 +54,47 @@ task sourcesJar(type: Jar, dependsOn: classes) {
     extension "jar"
 }
 
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+// Create the pom configuration:
+def pomConfig = {
+    licenses {
+        license {
+            name "The Apache Software License, Version 2.0"
+            url "http://www.apache.org/licenses/LICENSE-2.0.txt"
+            distribution "repo"
+        }
+    }
+    developers {
+        developer {
+            id "janbols"
+            name "Jan Bols"
+            email "guterfluss@gmail.com"
+        }
+    }
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
             artifact sourcesJar
+            artifact javadocJar
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', 'Dbunit extension for spock avoiding a separate xml file')
+                root.appendNode('name', 'spock-dbunit')
+                root.appendNode('url', 'https://github.com/janbols/spock-dbunit')
+                root.children().last() + pomConfig
+            }
         }
     }
 }
 
 
-task wrapper(type: Wrapper) {
-    gradleVersion = "2.6"
-}
 
 bintray {
     user = System.getenv('BINTRAY_USER')
@@ -78,11 +106,27 @@ bintray {
         licenses = ['Apache-2.0']
         websiteUrl = 'https://github.com/janbols/spock-dbunit'
         vcsUrl = 'https://github.com/janbols/spock-dbunit.git'
+        issueTrackerUrl = 'https://github.com/janbols/spock-dbunit/issues'
+        labels = ['spock', 'dbunit']
+
+        githubRepo = 'janbols/spock-dbunit' 
+        githubReleaseNotesFile = 'README.md'
+
         version {
-            name = version
-            vcsTag = version
+            name = project.version
+            vcsTag = project.version
+
+            gpg {
+                sign = true 
+            }
+            
+            mavenCentralSync {
+                sync = true 
+                user = System.getenv('OSS_USER_TOKEN')
+                password = System.getenv('OSS_PASSWORD')
+            }
         }
     }
 
 }
-bintrayUpload.dependsOn build, sourcesJar
+bintrayUpload.dependsOn build, sourcesJar, javadocJar
