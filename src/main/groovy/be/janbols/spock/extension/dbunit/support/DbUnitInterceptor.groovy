@@ -3,6 +3,7 @@ package be.janbols.spock.extension.dbunit.support
 import be.janbols.spock.extension.dbunit.DbUnit
 import org.dbunit.DataSourceDatabaseTester
 import org.dbunit.IDatabaseTester
+import org.dbunit.database.IDatabaseConnection
 import org.spockframework.runtime.extension.AbstractMethodInterceptor
 import org.spockframework.runtime.extension.ExtensionException
 import org.spockframework.runtime.extension.IMethodInvocation
@@ -14,7 +15,7 @@ import org.spockframework.runtime.model.FieldInfo
  */
 class DbUnitInterceptor extends AbstractMethodInterceptor {
 
-    private DataSourceDatabaseTester tester
+    private IDatabaseTester tester
     private final DbUnit dbUnitAnnotation
 
     private final DataSourceProvider dataSourceProvider
@@ -48,6 +49,8 @@ class DbUnitInterceptor extends AbstractMethodInterceptor {
         dataSourceProvider.withSetupInvocation(invocation)
     }
 
+    volatile IDatabaseConnection currentConnection = null
+
     @Override
     void interceptFeatureMethod(IMethodInvocation invocation) throws Throwable {
         //after setup to allow datasource setup
@@ -61,7 +64,22 @@ class DbUnitInterceptor extends AbstractMethodInterceptor {
             throw new ExtensionException("Failed to find a the data set. Specify one as a DbUnit-annotated field or provide one using @DbUnit.content")
         }
 
-        tester = new DataSourceDatabaseTester(dataSource, dbUnitAnnotation.schema())
+        //override default behaviour of DataSourceDatabaseTester to always create new connections.
+        tester = new DataSourceDatabaseTester(dataSource, dbUnitAnnotation.schema()) {
+            @Override
+            IDatabaseConnection getConnection() throws Exception {
+                if (!currentConnection || currentConnection.connection.isClosed()) {
+                    currentConnection = super.connection
+                }
+                return currentConnection
+            }
+
+            @Override
+            void closeConnection(IDatabaseConnection connection) throws Exception {
+                super.closeConnection(connection)
+                currentConnection = null
+            }
+        }
         tester.dataSet = dataSet
         configureTester(tester, invocation)
         tester.onSetup()

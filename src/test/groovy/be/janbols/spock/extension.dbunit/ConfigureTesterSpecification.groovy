@@ -1,9 +1,13 @@
 package be.janbols.spock.extension.dbunit
 
 import groovy.sql.Sql
+
+//
 import org.apache.tomcat.jdbc.pool.DataSource
 import org.dbunit.IDatabaseTester
+import org.dbunit.database.DatabaseConfig
 import org.dbunit.dataset.ReplacementDataSet
+import org.dbunit.ext.h2.H2DataTypeFactory
 import org.dbunit.operation.DatabaseOperation
 import org.joda.time.LocalDate
 import org.joda.time.LocalDateTime
@@ -15,34 +19,36 @@ import static SpecUtils.createUserTable
 import static SpecUtils.dropUserTable
 
 /**
-  * Specification showing how to configure the database by accessing the IDatabaseTester in the DbUnit#configure closure
-  */
-@ContextConfiguration(locations='classpath:/spring/context.xml')
-class ConfigureTesterSpecification extends Specification{
+ * Specification showing how to configure the database by accessing the IDatabaseTester in the DbUnit#configure closure
+ */
+@ContextConfiguration(locations = 'classpath:/spring/context.xml')
+class ConfigureTesterSpecification extends Specification {
 
-    @Autowired DataSource dataSource
+    @Autowired
+    DataSource dataSource
 
-    @DbUnit(configure={IDatabaseTester it ->
+    @DbUnit(configure = { IDatabaseTester it ->
         //tell db unit how to setup and teardown the database
         it.setUpOperation = DatabaseOperation.CLEAN_INSERT
         it.tearDownOperation = DatabaseOperation.TRUNCATE_TABLE
 
         //tell db unit to replace all occurrences of [TOMORROW] with the real value
         (it.dataSet as ReplacementDataSet).addReplacementObject('[TOMORROW]', LocalDateTime.now().plusDays(1).toDate())
+        //specify custom configurations if needed
+        it.connection.config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new H2DataTypeFactory())
     })
-    def content =  {
+    def content = {
         User(id: 1, name: 'janbols', created: '[NOW]', expiration: '[TOMORROW]')
     }
 
 
-    def setup(){
-        dataSource?.with {createUserTable(it)}
+    def setup() {
+        dataSource?.with { createUserTable(it) }
     }
 
     def cleanup() {
-        dataSource?.with {dropUserTable(it)}
+        dataSource?.with { dropUserTable(it) }
     }
-
 
 
     def "selecting from the User table returns the user"() {
