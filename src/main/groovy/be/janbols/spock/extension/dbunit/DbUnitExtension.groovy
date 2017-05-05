@@ -34,14 +34,16 @@ class DbUnitExtension extends AbstractAnnotationDrivenExtension<DbUnit> {
     @Override
     void visitSpec(SpecInfo spec) {
         //Note: spring integration works because the SpringExtension is a global extension and is executed before this one.
-        spec.addSetupSpecInterceptor(fieldInterceptor)
-        spec.addSetupInterceptor(fieldInterceptor)
-        //add field interceptor only to those features that aren't annotated yet by any DbUnit annotation
-        spec.features
-                .findAll { f -> !f.featureMethod.reflection.annotations*.annotationType().contains(DbUnit) }
-                .each { f -> f.featureMethod.addInterceptor(fieldInterceptor)
+        if (fieldInterceptor) {
+            spec.addSetupSpecInterceptor(fieldInterceptor)
+            spec.addSetupInterceptor(fieldInterceptor)
+            //add field interceptor only to those features that aren't annotated yet by any DbUnit annotation
+            spec.features
+                    .findAll { f -> !f.featureMethod.reflection.annotations*.annotationType().contains(DbUnit) }
+                    .each { f -> f.featureMethod.addInterceptor(fieldInterceptor)
+            }
+            spec.addCleanupInterceptor(fieldInterceptor)
         }
-        spec.addCleanupInterceptor(fieldInterceptor)
     }
 
 
