@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/janbols/spock-dbunit.svg?branch=master)](https://travis-ci.org/janbols/spock-dbunit)
-[![Download](https://api.bintray.com/packages/janbols/maven/spock-dbunit/images/download.svg) ](https://bintray.com/janbols/maven/spock-dbunit/_latestVersion)
+[![Download](https://api.bintray.com/packages/janbols/maven/spock-dbunit/images/download.svg?version=0.4) ](https://bintray.com/janbols/maven/spock-dbunit/0.4/link)
 
 spock-dbunit
 ============
@@ -171,16 +171,16 @@ Enable the JCenter repository:
 Add spock-reports to your <dependencies>:
 
     <dependency>
-        <groupId>be.janbols</groupId>
-        <artifactId>spock-dbunit</artifactId>
-        <version>0.3</version>
-        <scope>test</scope>
+      <groupId>com.github.janbols</groupId>
+      <artifactId>spock-dbunit</artifactId>
+      <version>0.4</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
-        <groupId>org.dbunit</groupId>
-        <artifactId>dbunit</artifactId>
-        <version>2.5.1</version>
-        <scope>test</scope>
+      <groupId>org.dbunit</groupId>
+      <artifactId>dbunit</artifactId>
+      <version>2.5.1</version>
+      <scope>test</scope>
     </dependency>
 
 
@@ -191,15 +191,19 @@ using Gradle:
     }
 
     dependencies {
-        testCompile( 'be.janbols:spock-dbunit:0.3' )
-        testCompile( 'org.dbunit:dbunit:2.5.1' )
+        testCompile 'com.github.janbols:spock-dbunit:0.4'
+        testCompile 'org.dbunit:dbunit:2.5.1'
     }
 
 If you prefer, you can just download the jar directly 
-from [JCenter](http://jcenter.bintray.com/be/janbols/spock-dbunit/0.3/spock-dbunit-0.3.jar).
+from [JCenter](http://jcenter.bintray.com/com/github/janbols/spock-dbunit/0.4/:spock-dbunit-0.4.jar).
 
 Changes
 ---
+#### Version 0.4
+* Solve a bug that allows you to specify connection configuration properties (https://github.com/janbols/spock-dbunit/issues/9)
+* Solve a bug when no `DbUnit` annotation exists on a field but only on features (https://github.com/janbols/spock-dbunit/issues/10)
+
 #### Version 0.3
 * Be able to override the `DbUnit` content per feature (https://github.com/janbols/spock-dbunit/issues/7)
 * Be able to specify the schema (https://github.com/janbols/spock-dbunit/issues/6)

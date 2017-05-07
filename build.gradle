@@ -13,7 +13,7 @@ plugins {
 
 
 group = 'com.github.janbols'
-version = "0.4-SNAPSHOT"
+version = "0.4"
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
@@ -61,6 +61,11 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 
 // Create the pom configuration:
 def pomConfig = {
+    scm {
+        url 'https://github.com/janbols/spock-dbunit'
+        connection 'scm:git:git://github.com/janbols/spock-dbunit.git'
+        developerConnection 'scm:git:ssh:git@github.com:janbols/spock-dbunit.git'             
+    }
     licenses {
         license {
             name "The Apache Software License, Version 2.0"
