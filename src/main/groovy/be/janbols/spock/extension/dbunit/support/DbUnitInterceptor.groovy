@@ -65,7 +65,10 @@ class DbUnitInterceptor extends AbstractMethodInterceptor {
         }
 
         //override default behaviour of DataSourceDatabaseTester to always create new connections.
-        tester = new DataSourceDatabaseTester(dataSource, dbUnitAnnotation.schema()) {
+
+        //make sure to initialize schema to null when it's not specified. Otherwise a schema "" will be created instead of the default one
+        //see https://github.com/janbols/spock-dbunit/issues/12
+        tester = new DataSourceDatabaseTester(dataSource, dbUnitAnnotation.schema() ?: null ) {
             @Override
             IDatabaseConnection getConnection() throws Exception {
                 if (!currentConnection || currentConnection.connection.isClosed()) {
