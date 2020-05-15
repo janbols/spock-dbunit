@@ -76,4 +76,9 @@ public @interface DbUnit {
      */
     Class<? extends Closure> content() default Object.class;
 
+    /**
+     * Enables "column sensing" feature of DBUnit,
+     * where the list of columns for a table can vary - it is no longer deducted from the first row.
+     */
+    boolean columnSensing() default false;
 }
