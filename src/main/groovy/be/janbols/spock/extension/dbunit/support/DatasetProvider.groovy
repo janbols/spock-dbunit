@@ -43,8 +43,10 @@ class DataSetProvider {
         return xmlWriter as String
     }
 
-    private static ReplacementDataSet replacementDataSet(Reader input) throws DataSetException {
-        def dataSet = new ReplacementDataSet(new FlatXmlDataSetBuilder().build(input))
+    private ReplacementDataSet replacementDataSet(Reader input) throws DataSetException {
+        def flatXmlDataSet = new FlatXmlDataSetBuilder().setColumnSensing(dbUnitAnnotation.columnSensing()).build(input)
+
+        def dataSet = new ReplacementDataSet(flatXmlDataSet)
         dataSet.addReplacementObject("[NULL]", null);
         dataSet.addReplacementObject("[NOW]", new Date());
         return dataSet;
