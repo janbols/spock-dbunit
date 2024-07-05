@@ -72,7 +72,7 @@ class DbUnitInterceptor extends AbstractMethodInterceptor {
             @Override
             IDatabaseConnection getConnection() throws Exception {
                 if (!currentConnection || currentConnection.connection.isClosed()) {
-                    currentConnection = super.connection
+                    currentConnection = super.getConnection()
                 }
                 return currentConnection
             }
